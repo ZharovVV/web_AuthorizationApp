@@ -22,8 +22,7 @@ import java.util.List;
  */
 public class DBService {
     private static final String hibernate_show_sql = "true";
-    private static final String hibernate_hbm2ddl_auto = "create-drop";
-
+    private static final String hibernate_hbm2ddl_auto = "update";
     private final SessionFactory sessionFactory;
 
     public DBService() {
