@@ -7,8 +7,16 @@ import dbService.dataSets.UsersDataSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  Класс, предназначенный для управления учетными записями.
+ */
 public class AccountService {
     /*private final Map<String, UserProfile> loginToProfile;*/
+    /**
+     * Мар Сессий пользователя. Если пользователь залогинился (sign in),
+     * то этот пользователь добавляется  по ключу sessionId в sessionIdToProfile,
+     * если вышел - удаляется.
+     */
     private final Map<String, UserProfile> sessionIdToProfile;
     private final DBService dbService;
 

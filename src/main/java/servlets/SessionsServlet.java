@@ -17,6 +17,7 @@ import java.io.IOException;
  * Пример кода для курса на https://stepic.org/
  * <p>
  * Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
+ *      Сервлет Сессий. Необходим для обработки запросов входа и выхода пользователей (sign in).
  */
 public class SessionsServlet extends HttpServlet {
     private final AccountService accountService;

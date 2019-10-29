@@ -1,6 +1,6 @@
 package dbService.dataSets;
 
-import javax.persistence.*;
+import javax.persistence.*;     // Поддержка необходимых аннотаций
 import java.io.Serializable;
 
 /**
@@ -9,14 +9,19 @@ import java.io.Serializable;
  * Пример кода для курса на https://stepic.org/
  * <p>
  * Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
+ *
+ * DataSet (набор данных) - объект, содержащий данные одной строки таблицы. На каждую таблицу свой DataSet-класс.
+ * Объект DataSet - строка в таблице.
+ * Вместе с DAO (Data Access Object, объект доступа данных) являются элементами ORM (Object-Relational Mapping,
+ * объектно-реляционного отображения).
  */
-@Entity
-@Table(name = "users")
+@Entity //Объект класса можно "переложить" в таблицу.
+@Table(name = "users")  //Связывает класс и таблицу
 public class UsersDataSet implements Serializable { // Serializable Important to Hibernate!
     private static final long serialVersionUID = -8706689714326132798L;
 
-    @Id
-    @Column(name = "id")
+    @Id //Является первичным ключом
+    @Column(name = "id")    //Связывает поле и колонку в таблице
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

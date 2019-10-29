@@ -19,10 +19,21 @@ import java.util.List;
  *         Пример кода для курса на https://stepic.org/
  *         <p>
  *         Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
+ *
+ *
  */
 public class DBService {
     private static final String hibernate_show_sql = "true";
+    /*private static final String hibernate_hbm2ddl_auto = "create-drop";*/ // Уничтожает схему при закрытии SessionFactory
     private static final String hibernate_hbm2ddl_auto = "update";
+
+    /**
+     * Фабрика, создающаяя сессии. Сессия - юнит, позволяющий делать запросы к базе.
+     * Одна фабрика на поток, одна сессия на запрос.
+     * Методом openSession() создается объект класса Session.
+     * Время жизни сессии соответствует времени жизни транзакции. Задача сессии -
+     * работа с объектами проаннотрированными как @Entity.
+     */
     private final SessionFactory sessionFactory;
 
     public DBService() {
@@ -34,7 +45,7 @@ public class DBService {
     @SuppressWarnings("UnusedDeclaration")
     private Configuration getMySqlConfiguration() {
         Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(UsersDataSet.class);
+        configuration.addAnnotatedClass(UsersDataSet.class);    //Добавление аннотированного класса (DataSet.class) в конфигурацию
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
@@ -87,6 +98,20 @@ public class DBService {
         }
     }
 
+    public long addUser(UserProfile user) throws DBException {
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            UsersDAO dao = new UsersDAO(session);
+            long id = dao.insertUser(user.getLogin(),user.getPassword(),user.getEmail());
+            transaction.commit();
+            session.close();
+            return id;
+        } catch (HibernateException e) {
+            throw new DBException(e);
+        }
+    }
+
     public boolean checkUserByLogin(String login) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -120,20 +145,6 @@ public class DBService {
             throw new DBException(e);
         }
     }*/
-
-    public long addUser(UserProfile user) throws DBException {
-        try {
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            UsersDAO dao = new UsersDAO(session);
-            long id = dao.insertUser(user.getLogin(),user.getPassword(),user.getEmail());
-            transaction.commit();
-            session.close();
-            return id;
-        } catch (HibernateException e) {
-            throw new DBException(e);
-        }
-    }
 
     /*public List<UsersDataSet> readAll() {
         Session session = sessionFactory.openSession();

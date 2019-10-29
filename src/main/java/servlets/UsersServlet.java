@@ -17,6 +17,8 @@ import java.io.IOException;
  * Пример кода для курса на https://stepic.org/
  * <p>
  * Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
+ *
+ *      Пользовательский Сервлет. Необходим для обработки POST-запросов регистрации пользователя (sign up).
  */
 public class UsersServlet extends HttpServlet {
     @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"}) //todo: remove after module 2 home work
@@ -35,18 +37,22 @@ public class UsersServlet extends HttpServlet {
     //sign up
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
+        // Получаем параметры POST-запроса для /signup (см. index.html).
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
 
+        // Случай пустых полей
         if (login == null || password == null || email == null || login.equals("") || password.equals("") || email.equals("")) {
+            // Ответ
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Ошибка, пропущено поле");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            // выход из метода
             return;
         }
 
-
+        // Если пользователь с таким логином существует:
         if ( accountService.getDbService().checkUserByLogin(login)) {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Пользователь c таким логином уже существует!");
@@ -54,6 +60,7 @@ public class UsersServlet extends HttpServlet {
             return;
         }
 
+        // Если пользователь с таким email...
         if ( accountService.getDbService().checkUserByEmail(email)) {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Пользователь c таким Email уже существует!");
@@ -62,8 +69,9 @@ public class UsersServlet extends HttpServlet {
         }
 
         /*accountService.addNewUser(new UserProfile(login));*/
+        // Если все проверки прошли, добавляем пользователя в БД
         accountService.addNewUser(new UserProfile(login, password, email));
-
+        // Ответ
         response.setContentType("text/html;charset=utf-8");
         response.getWriter().println("Пользователь зарегестрирован!");
         response.setStatus(HttpServletResponse.SC_OK);

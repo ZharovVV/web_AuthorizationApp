@@ -13,6 +13,10 @@ import org.hibernate.criterion.Restrictions;
  * Пример кода для курса на https://stepic.org/
  * <p>
  * Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
+ * <p>
+ * Data Access Object (DAO) - объект доступа к данным;
+ * шаблон проектирования, скрывающий детали работы с БД. Обычно один DAO на одну таблицу.
+ * Высокоуровневый доступ к данным через DataSet-ы.
  */
 public class UsersDAO {
 
